@@ -20,6 +20,13 @@ The plugin requires:
 
 To deploy simply drag the contents of the folder to `src/extensions/` on the Phabricator instance and then restart the application.
 
+### Teamcity-Phabricator-Plugin
+
+The teamcity plugin comprises of server and agent plugins for teamcity. 
+
+#### Server
+The server plugin monitors builds with the phabricator feature enabled waiting for builds to finish and notify phabricator.
+
 ## Useful Links
 
 * https://confluence.jetbrains.com/display/TCD10/Web+UI+Extensions
