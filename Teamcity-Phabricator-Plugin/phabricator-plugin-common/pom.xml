@@ -8,6 +8,15 @@
   </parent>
   <artifactId>phabricator-plugin-common</artifactId>
   <packaging>jar</packaging>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.jetbrains.teamcity</groupId>
+      <artifactId>common-api</artifactId>
+      <version>${teamcity-version}</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>

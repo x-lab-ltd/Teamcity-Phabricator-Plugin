@@ -4,5 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
        default-autowire="constructor">
        
-       <bean class="uk.xlab.teamcity.phabricator.PhabricatorPluginBuildFeature"></bean>
+       <bean class="uk.xlab.teamcity.phabricator.PhabricatorPluginBuildFeature" />
+       <bean class="uk.xlab.teamcity.phabricator.PhabricatorPluginLogger" />
 </beans>

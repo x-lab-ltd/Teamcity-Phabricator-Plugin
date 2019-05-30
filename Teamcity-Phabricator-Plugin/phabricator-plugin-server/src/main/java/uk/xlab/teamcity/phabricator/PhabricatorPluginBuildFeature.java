@@ -4,17 +4,22 @@ import java.util.Map;
 
 import org.jetbrains.annotations.NotNull;
 
-import jetbrains.buildServer.log.Loggers;
 import jetbrains.buildServer.serverSide.BuildFeature;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 
 public class PhabricatorPluginBuildFeature extends BuildFeature {
-	private final String myEditUrl;
 	
-	public PhabricatorPluginBuildFeature(@NotNull final PluginDescriptor pluginDescriptor) {
+	private final String myEditUrl;
+	private PhabricatorPluginLogger logger;
+	
+	public PhabricatorPluginBuildFeature(
+			@NotNull final PluginDescriptor pluginDescriptor,
+			@NotNull final PhabricatorPluginLogger logger
+	) {
 		myEditUrl = pluginDescriptor.getPluginResourcesPath("phabricatorBuildFeature.jsp");
+		this.logger = logger;
 		
-		Loggers.SERVER.info("Phabricator build feature registered");
+		this.logger.serverInfo("Build feature registered");
 	}
 	
 	@Override
