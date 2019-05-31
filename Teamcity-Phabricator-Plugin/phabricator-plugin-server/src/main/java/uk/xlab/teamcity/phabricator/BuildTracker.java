@@ -49,6 +49,14 @@ public class BuildTracker implements Runnable {
             // Setup plugin specific configuration
             // TODO: implement AppConfig as PluginConfig
             phabricatorConfig.setParameters(params);
+            
+            // Now we have set all the parameters we need to check if
+            // everything is present and correct for us to continue
+            if (!phabricatorConfig.isPluginSetup())
+            {
+                logger.info("Plugin incorrectly configured");
+                return;
+            }
 
             while (!build.isFinished()) {
                 // Wait until the build finishes
