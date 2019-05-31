@@ -17,48 +17,48 @@ import jetbrains.buildServer.serverSide.SRunningBuild;
  */
 public class BuildTracker implements Runnable {
 
-	private SRunningBuild build;
-	private PhabricatorServerLogger logger;
-	private PhabricatorPluginConfig phabricatorConfig;
+    private SRunningBuild build;
+    private PhabricatorServerLogger logger;
+    private PhabricatorPluginConfig phabricatorConfig;
 
-	public BuildTracker(SRunningBuild runningBuild, PhabricatorServerLogger phabLogger) {
-		build = runningBuild;
-		logger = phabLogger;
+    public BuildTracker(SRunningBuild runningBuild, PhabricatorServerLogger phabLogger) {
+        build = runningBuild;
+        logger = phabLogger;
 
-		phabricatorConfig = new PhabricatorPluginConfig();
-		phabricatorConfig.setLogger(logger);
-	}
+        phabricatorConfig = new PhabricatorPluginConfig();
+        phabricatorConfig.setLogger(logger);
+    }
 
-	@Override
-	public void run() {
-		// Attempt to get the parameters set by the phabricator build feature. If non
-		// are set then the feature is not turned on.
-		Collection<SBuildFeatureDescriptor> phabricatorBuildFeatureParameters = build
-				.getBuildFeaturesOfType(Constants.BUILD_FEATURE_TYPE);
+    @Override
+    public void run() {
+        // Attempt to get the parameters set by the phabricator build feature. If non
+        // are set then the feature is not turned on.
+        Collection<SBuildFeatureDescriptor> phabricatorBuildFeatureParameters = build
+                .getBuildFeaturesOfType(Constants.BUILD_FEATURE_TYPE);
 
-		// Check if the build is part of a configuration which
-		// uses the phabricator build feature.
-		if (!phabricatorBuildFeatureParameters.isEmpty()) {
-			logger.info("Tracking build " + build.getBuildNumber());
+        // Check if the build is part of a configuration which
+        // uses the phabricator build feature.
+        if (!phabricatorBuildFeatureParameters.isEmpty()) {
+            logger.info("Tracking build " + build.getBuildNumber());
 
-			// Gather together all the build and phabricator parameters
-			Map<String, String> params = new HashMap<>();
-			params.putAll(build.getBuildOwnParameters());
-			params.putAll(phabricatorBuildFeatureParameters.iterator().next().getParameters());
+            // Gather together all the build and phabricator parameters
+            Map<String, String> params = new HashMap<>();
+            params.putAll(build.getBuildOwnParameters());
+            params.putAll(phabricatorBuildFeatureParameters.iterator().next().getParameters());
 
-			// Setup plugin specific configuration
-			// TODO: implement AppConfig as PluginConfig
-			phabricatorConfig.setParameters(params);
+            // Setup plugin specific configuration
+            // TODO: implement AppConfig as PluginConfig
+            phabricatorConfig.setParameters(params);
 
-			while (!build.isFinished()) {
-				// Wait until the build finishes
-			}
+            while (!build.isFinished()) {
+                // Wait until the build finishes
+            }
 
-			logger.info(String.format("Build %s finished: %s", build.getBuildNumber(), build.getBuildStatus()));
+            logger.info(String.format("Build %s finished: %s", build.getBuildNumber(), build.getBuildStatus()));
 
-			if (build.getStatusDescriptor().isSuccessful()) {
-				logger.info("Successful Build");
-			}
-		}
-	}
+            if (build.getStatusDescriptor().isSuccessful()) {
+                logger.info("Successful Build");
+            }
+        }
+    }
 }
