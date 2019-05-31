@@ -10,16 +10,16 @@ import jetbrains.buildServer.web.openapi.PluginDescriptor;
 public class PhabricatorPluginBuildFeature extends BuildFeature {
 	
 	private final String myEditUrl;
-	private PhabricatorPluginLogger logger;
+	private PhabricatorServerLogger logger;
 	
 	public PhabricatorPluginBuildFeature(
 			@NotNull final PluginDescriptor pluginDescriptor,
-			@NotNull final PhabricatorPluginLogger logger
+			@NotNull final PhabricatorServerLogger phabLogger
 	) {
 		myEditUrl = pluginDescriptor.getPluginResourcesPath("phabricatorBuildFeature.jsp");
-		this.logger = logger;
+		logger = phabLogger;
 		
-		this.logger.serverInfo("Build feature registered");
+		logger.info("Build feature registered");
 	}
 	
 	@Override
