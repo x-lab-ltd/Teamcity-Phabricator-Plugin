@@ -24,12 +24,12 @@ final class TeamCityXmlBuildBuilder {
     }
 
     function addPhabBuildId($buildId){
-        $this->addProperty("env.PHAB_BUILD_ID", $buildId);
+        $this->addProperty("phabricator.BUILD_ID", $buildId);
         return $this;
     }
 
     function addRevisionId($revisionId){
-        $this->addProperty("env.PHAB_REVISION_ID", $revisionId);
+        $this->addProperty("phabricator.REVISION_ID", $revisionId);
         return $this;
     }
 
@@ -37,18 +37,18 @@ final class TeamCityXmlBuildBuilder {
         // $this->
         //     root->
         //     setAttribute('branchName', $branchName);
-        $this->addProperty("env.PHAB_BRANCH_NAME", $branchName);
+        $this->addProperty("phabricator.BRANCH_NAME", $branchName);
 
         return $this;
     }
 
     function addHarbormasterPHID($phid){
-        $this->addProperty('env.PHAB_HARBORMASTER_TARGET_PHID', $phid);
+        $this->addProperty('phabricator.HARBORMASTER_TARGET_PHID', $phid);
         return $this;
     }
 
     function addDiffId($diffId){
-        $this->addProperty('env.PHAB_DIFF_ID', $diffId);
+        $this->addProperty('phabricator.DIFF_ID', $diffId);
         return $this;
     }
 

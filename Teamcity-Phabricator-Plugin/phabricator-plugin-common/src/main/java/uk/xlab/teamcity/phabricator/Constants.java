@@ -11,9 +11,9 @@ public class Constants {
     public static final String PHABRICATOR_CONDUIT_TOKEN_SETTING = "plugin.conduitToken";
 
     // Build Config
-    public static final String BRANCH_NAME = "env.PHAB_BRANCH_NAME";
-    public static final String BUILD_ID = "env.PHAB_BUILD_ID";
-    public static final String DIFF_ID = "env.PHAB_DIFF_ID";
-    public static final String HARBORMASTER_PHID = "env.PHAB_HARBORMASTER_TARGET_PHID";
-    public static final String REVISION_ID = "env.PHAB_REVISION_ID";
+    public static final String BRANCH_NAME = "phabricator.BRANCH_NAME";
+    public static final String BUILD_ID = "phabricator.BUILD_ID";
+    public static final String DIFF_ID = "phabricator.DIFF_ID";
+    public static final String HARBORMASTER_PHID = "phabricator.HARBORMASTER_TARGET_PHID";
+    public static final String REVISION_ID = "phabricator.REVISION_ID";
 }
