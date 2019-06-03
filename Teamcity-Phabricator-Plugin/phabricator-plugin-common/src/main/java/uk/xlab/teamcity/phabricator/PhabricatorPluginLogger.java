@@ -1,6 +1,6 @@
 package uk.xlab.teamcity.phabricator;
 
-public interface IPhabricatorPluginLogger {
+public interface PhabricatorPluginLogger {
 
     public void info(String message);
 

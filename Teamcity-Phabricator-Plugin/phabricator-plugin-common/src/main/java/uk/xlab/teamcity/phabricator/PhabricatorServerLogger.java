@@ -2,7 +2,7 @@ package uk.xlab.teamcity.phabricator;
 
 import jetbrains.buildServer.log.Loggers;
 
-public final class PhabricatorServerLogger implements IPhabricatorPluginLogger {
+public final class PhabricatorServerLogger implements PhabricatorPluginLogger {
 
     @Override
     public void info(String message) {

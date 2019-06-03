@@ -15,7 +15,7 @@ import static uk.xlab.teamcity.phabricator.CommonUtils.*;
  */
 public class PhabricatorPluginConfig {
 
-    private IPhabricatorPluginLogger logger;
+    private PhabricatorPluginLogger logger;
     private Map<String, String> params;
 
     // Build Feature Variables
@@ -35,7 +35,7 @@ public class PhabricatorPluginConfig {
      * 
      * @param logger
      */
-    public void setLogger(PhabricatorServerLogger logger) {
+    public void setLogger(PhabricatorPluginLogger logger) {
         this.logger = logger;
     }
 
@@ -65,7 +65,7 @@ public class PhabricatorPluginConfig {
                 case Constants.PHABRICATOR_CONDUIT_TOKEN_SETTING:
                     logger.info("Found Phabricator Conduit Token");
                     conduitToken = params.get(Constants.PHABRICATOR_CONDUIT_TOKEN_SETTING);
-                    
+
                 case Constants.BRANCH_NAME:
                     logger.info(String.format("Found branch name: %s", params.get(Constants.BRANCH_NAME)));
                     branchName = params.get(Constants.BRANCH_NAME);
