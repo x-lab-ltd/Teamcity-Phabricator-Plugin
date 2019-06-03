@@ -1,11 +1,24 @@
 package uk.xlab.teamcity.phabricator;
 
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import jetbrains.buildServer.messages.Status;
 import jetbrains.buildServer.serverSide.SBuildFeatureDescriptor;
 import jetbrains.buildServer.serverSide.SRunningBuild;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 /**
  * Class that is run in a thread once a build has started. If the build does not
@@ -49,11 +62,10 @@ public class BuildTracker implements Runnable {
             // Setup plugin specific configuration
             // TODO: implement AppConfig as PluginConfig
             phabricatorConfig.setParameters(params);
-            
+
             // Now we have set all the parameters we need to check if
             // everything is present and correct for us to continue
-            if (!phabricatorConfig.isPluginSetup())
-            {
+            if (!phabricatorConfig.isPluginSetup()) {
                 logger.info("Plugin incorrectly configured");
                 return;
             }
@@ -63,10 +75,46 @@ public class BuildTracker implements Runnable {
             }
 
             logger.info(String.format("Build %s finished: %s", build.getBuildNumber(), build.getBuildStatus()));
-
-            if (build.getStatusDescriptor().isSuccessful()) {
-                logger.info("Successful Build");
-            }
+            String harbormasterBuildStatus = parseTeamCityBuildStatus(build.getBuildStatus());
+            NotifyHarbormaster(harbormasterBuildStatus);
         }
+    }
+
+    /**
+     * Compose and dispatch an API call to harbormaster to notify of the build
+     * status
+     */
+    private void NotifyHarbormaster(String buildStatus) {
+        URL phabricatorURL = phabricatorConfig.getPhabricatorURL();
+
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
+            String requestEndpoint = String.format("%s/api/harbormaster.sendmessage", phabricatorURL.toString());
+            logger.info(String.format("Sending build status to: %s", requestEndpoint));
+            HttpPost httpPost = new HttpPost(requestEndpoint);
+
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("api.token", phabricatorConfig.getConduitToken()));
+            params.add(new BasicNameValuePair("buildTargetPHID", phabricatorConfig.getHarbormasterPHID()));
+            params.add(new BasicNameValuePair("type", buildStatus));
+            httpPost.setEntity(new UrlEncodedFormEntity(params));
+
+            try (CloseableHttpResponse response = client.execute(httpPost)) {
+                String responseText = EntityUtils.toString(response.getEntity());
+                logger.info(String.format("Phabricator response: %s", responseText));
+            }
+
+        } catch (Exception exception) {
+            // Just catching any Exception because the request to Phabricator may have
+            // failed and we should investigate
+            logger.error("Request to harbormaster failed", exception);
+        }
+    }
+
+    private String parseTeamCityBuildStatus(Status buildFinishedStatus){
+        if (buildFinishedStatus.isSuccessful()) {
+            return "pass";
+        }
+
+        return "fail";
     }
 }

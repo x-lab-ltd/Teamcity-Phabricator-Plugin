@@ -27,6 +27,21 @@ The teamcity plugin comprises of server and agent plugins for teamcity.
 #### Server
 The server plugin monitors builds with the phabricator feature enabled waiting for builds to finish and notify phabricator.
 
+Once build is triggered from phabricator using **Harbomaster-Teamcity-Plugin** and the phabricator build feature is configured on the build configuration then the server plugin will wait and listen for the build to finish before reporting the result back to harbormaster to be displayed in phabricator.
+
+## Getting Started
+
+**Harbormaster-Teamcity-Plugin**
+No building is needed for for the harbormaster plugin just dev away and copy the files into the `src/extensions` folder with your phabricator instance
+
+**Teamcity-Phabricator-Plugin**
+
+You will need to move in to the `Teamcity-Phabricator-Plugin/` folder:
+
+* To build the plugins (server and agent) just run: `mvn package`
+
+By default the teamcity plugin is equipped with teamcity-sdk-maven-plugin which allows for a local instance of teamcity with debugging capabilities. See their documentation for how to use: https://github.com/JetBrains/teamcity-sdk-maven-plugin
+
 ## Useful Links
 
 * https://confluence.jetbrains.com/display/TCD10/Web+UI+Extensions

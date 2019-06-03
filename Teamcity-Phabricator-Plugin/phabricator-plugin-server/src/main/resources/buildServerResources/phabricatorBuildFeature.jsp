@@ -3,7 +3,9 @@
 
 <jsp:useBean id="propertiesBean" scope="request" type="jetbrains.buildServer.controllers.BasePropertiesBean"/>
 
-<c:set var="phabricatorUrl" value="${propertiesBean.properties['phabricator_url_setting']}" />
+<c:set var="phabricatorUrl" value="${propertiesBean.properties['plugin.phabricatorUrl']}" />
+<c:set var="conduitToken" value="${propertiesBean.properties['plugin.conduitToken']}" />
 
 <tr><td colspan="2">Report build status in real-time to your Phabricator instance.</td></tr>
-<tr><th>Phabricator URL:</th><td><props:textProperty name="phabricator_url_setting"/></td></tr>
+<tr><th>Phabricator URL:</th><td><props:textProperty name="plugin.phabricatorUrl"/></td></tr>
+<tr><th>Conduit Token:</th><td><props:passwordProperty name="plugin.conduitToken" size="54"/></td></tr>

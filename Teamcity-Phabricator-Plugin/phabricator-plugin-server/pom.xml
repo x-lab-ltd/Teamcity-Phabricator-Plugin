@@ -8,8 +8,8 @@
   </parent>
   <artifactId>phabricator-plugin-server</artifactId>
   <packaging>jar</packaging>
-  <dependencies>
 
+  <dependencies>
     <dependency>
       <groupId>uk.xlab.teamcity.phabricator</groupId>
       <artifactId>phabricator-plugin-common</artifactId>
@@ -39,6 +39,12 @@
       <scope>test</scope>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>4.5.8</version>
+    </dependency>
   </dependencies>
 
   <build>

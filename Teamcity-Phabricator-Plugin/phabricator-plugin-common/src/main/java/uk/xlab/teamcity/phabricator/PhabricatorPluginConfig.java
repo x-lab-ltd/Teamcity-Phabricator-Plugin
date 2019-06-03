@@ -20,6 +20,7 @@ public class PhabricatorPluginConfig {
 
     // Build Feature Variables
     private URL phabricatorUrl;
+    private String conduitToken;
 
     // Harbormaster Variables
     private String branchName;
@@ -61,6 +62,10 @@ public class PhabricatorPluginConfig {
                         logger.warn(String.format("Failed to parse phabricator URL: %s",
                                 params.get(Constants.PHABRICATOR_URL_SETTING)), e);
                     }
+                case Constants.PHABRICATOR_CONDUIT_TOKEN_SETTING:
+                    logger.info("Found Phabricator Conduit Token");
+                    conduitToken = params.get(Constants.PHABRICATOR_CONDUIT_TOKEN_SETTING);
+                    
                 case Constants.BRANCH_NAME:
                     logger.info(String.format("Found branch name: %s", params.get(Constants.BRANCH_NAME)));
                     branchName = params.get(Constants.BRANCH_NAME);
@@ -89,6 +94,18 @@ public class PhabricatorPluginConfig {
         }
 
         return false;
+    }
+
+    public URL getPhabricatorURL() {
+        return phabricatorUrl;
+    }
+
+    public String getConduitToken() {
+        return conduitToken;
+    }
+
+    public String getHarbormasterPHID() {
+        return harbormasterPHID;
     }
 
     private URL parsePhabricatorURL(String input) throws MalformedURLException {
