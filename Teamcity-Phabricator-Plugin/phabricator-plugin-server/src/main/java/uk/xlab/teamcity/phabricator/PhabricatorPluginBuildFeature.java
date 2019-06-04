@@ -48,9 +48,10 @@ public class PhabricatorPluginBuildFeature extends BuildFeature {
     public String describeParameters(@NotNull final Map<String, String> params) {
         String url = "";
 
-        for (String key : params.keySet()) {
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            String key = entry.getKey();
             if (key.equals(Constants.PHABRICATOR_URL_SETTING)) {
-                url = params.get(key);
+                url = entry.getValue();
             }
         }
 

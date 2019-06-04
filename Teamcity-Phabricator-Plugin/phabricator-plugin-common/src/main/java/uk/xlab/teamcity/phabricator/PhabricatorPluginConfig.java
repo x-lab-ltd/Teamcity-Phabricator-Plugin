@@ -47,7 +47,7 @@ public class PhabricatorPluginConfig {
     public void setParameters(Map<String, String> parameters) {
         params = parameters;
 
-        logger.info(String.format("Looking for parameters"));
+        logger.info("Looking for parameters");
         for (String param : params.keySet()) {
             if (!isNullOrEmpty(param)) {
                 logger.info(String.format("Found %s", param));
@@ -62,26 +62,35 @@ public class PhabricatorPluginConfig {
                         logger.warn(String.format("Failed to parse phabricator URL: %s",
                                 params.get(Constants.PHABRICATOR_URL_SETTING)), e);
                     }
+                    break;
                 case Constants.PHABRICATOR_CONDUIT_TOKEN_SETTING:
                     logger.info("Found Phabricator Conduit Token");
                     conduitToken = params.get(Constants.PHABRICATOR_CONDUIT_TOKEN_SETTING);
-
+                    break;
                 case Constants.BRANCH_NAME:
                     logger.info(String.format("Found branch name: %s", params.get(Constants.BRANCH_NAME)));
                     branchName = params.get(Constants.BRANCH_NAME);
+                    break;
                 case Constants.BUILD_ID:
                     logger.info(String.format("Found build id: %s", params.get(Constants.BUILD_ID)));
                     buildId = params.get(Constants.BUILD_ID);
+                    break;
                 case Constants.DIFF_ID:
                     logger.info(String.format("Found diff ID: %s", params.get(Constants.DIFF_ID)));
                     diffId = params.get(Constants.DIFF_ID);
+                    break;
                 case Constants.HARBORMASTER_PHID:
                     logger.info(String.format("Found harbormaster target PHID: %s",
                             params.get(Constants.HARBORMASTER_PHID)));
                     harbormasterPHID = params.get(Constants.HARBORMASTER_PHID);
+                    break;
                 case Constants.REVISION_ID:
                     logger.info(String.format("Found revision ID: %s", params.get(Constants.REVISION_ID)));
                     revisionId = params.get(Constants.REVISION_ID);
+                    break;
+                default:
+                    // Another parameter which we do not care about
+                    break;
                 }
             }
         }
@@ -110,16 +119,6 @@ public class PhabricatorPluginConfig {
 
     private URL parsePhabricatorURL(String input) throws MalformedURLException {
         URL inputURL = new URL(input);
-        String scheme = inputURL.getProtocol();
-        if (scheme == null)
-            scheme = "http";
-        int port = inputURL.getPort();
-        if (port == -1) {
-            if (scheme == "https")
-                port = 443;
-            else
-                port = 80;
-        }
         return inputURL;
     }
 

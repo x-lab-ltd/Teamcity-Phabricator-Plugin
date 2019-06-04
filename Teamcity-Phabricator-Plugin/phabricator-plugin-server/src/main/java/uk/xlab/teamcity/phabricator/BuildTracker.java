@@ -76,7 +76,7 @@ public class BuildTracker implements Runnable {
 
             logger.info(String.format("Build %s finished: %s", build.getBuildNumber(), build.getBuildStatus()));
             String harbormasterBuildStatus = parseTeamCityBuildStatus(build.getBuildStatus());
-            NotifyHarbormaster(harbormasterBuildStatus);
+            notifyHarbormaster(harbormasterBuildStatus);
         }
     }
 
@@ -84,7 +84,7 @@ public class BuildTracker implements Runnable {
      * Compose and dispatch an API call to harbormaster to notify of the build
      * status
      */
-    private void NotifyHarbormaster(String buildStatus) {
+    private void notifyHarbormaster(String buildStatus) {
         URL phabricatorURL = phabricatorConfig.getPhabricatorURL();
 
         try (CloseableHttpClient client = HttpClients.createDefault()) {
@@ -110,7 +110,7 @@ public class BuildTracker implements Runnable {
         }
     }
 
-    private String parseTeamCityBuildStatus(Status buildFinishedStatus){
+    private String parseTeamCityBuildStatus(Status buildFinishedStatus) {
         if (buildFinishedStatus.isSuccessful()) {
             return "pass";
         }

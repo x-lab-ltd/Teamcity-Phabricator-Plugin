@@ -13,10 +13,24 @@ public class PhabricatorBuildStartContextProcessor implements BuildStartContextP
         // agent
         Map<String, String> parameters = context.getBuild().getBuildOwnParameters();
 
-        context.addSharedParameter(Constants.BRANCH_NAME, parameters.get(Constants.BRANCH_NAME));
-        context.addSharedParameter(Constants.BUILD_ID, parameters.get(Constants.BUILD_ID));
-        context.addSharedParameter(Constants.DIFF_ID, parameters.get(Constants.DIFF_ID));
-        context.addSharedParameter(Constants.HARBORMASTER_PHID, parameters.get(Constants.HARBORMASTER_PHID));
-        context.addSharedParameter(Constants.REVISION_ID, parameters.get(Constants.REVISION_ID));
+        if (parameters.containsKey(Constants.BRANCH_NAME)) {
+            context.addSharedParameter(Constants.BRANCH_NAME, parameters.get(Constants.BRANCH_NAME));
+        }
+
+        if (parameters.containsKey(Constants.BUILD_ID)) {
+            context.addSharedParameter(Constants.BUILD_ID, parameters.get(Constants.BUILD_ID));
+        }
+
+        if (parameters.containsKey(Constants.DIFF_ID)) {
+            context.addSharedParameter(Constants.DIFF_ID, parameters.get(Constants.DIFF_ID));
+        }
+
+        if (parameters.containsKey(Constants.HARBORMASTER_PHID)) {
+            context.addSharedParameter(Constants.HARBORMASTER_PHID, parameters.get(Constants.HARBORMASTER_PHID));
+        }
+
+        if (parameters.containsKey(Constants.REVISION_ID)) {
+            context.addSharedParameter(Constants.REVISION_ID, parameters.get(Constants.REVISION_ID));
+        }
     }
 }
