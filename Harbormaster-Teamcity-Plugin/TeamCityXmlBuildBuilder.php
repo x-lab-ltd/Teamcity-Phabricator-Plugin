@@ -33,11 +33,8 @@ final class TeamCityXmlBuildBuilder {
         return $this;
     }
 
-    function addBranchName($branchName){
-        // $this->
-        //     root->
-        //     setAttribute('branchName', $branchName);
-        $this->addProperty("phabricator.BRANCH_NAME", $branchName);
+    function addRevisionBuild($revisionBuild){
+        $this->addProperty("phabricator.REVISION_BUILD", $revisionBuild);
 
         return $this;
     }

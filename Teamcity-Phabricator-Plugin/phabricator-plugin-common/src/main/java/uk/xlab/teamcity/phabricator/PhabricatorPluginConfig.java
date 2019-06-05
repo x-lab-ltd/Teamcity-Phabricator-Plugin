@@ -23,7 +23,6 @@ public class PhabricatorPluginConfig {
     private String conduitToken;
 
     // Harbormaster Variables
-    private String branchName;
     private String buildId;
     private String diffId;
     private String harbormasterPHID;
@@ -67,10 +66,6 @@ public class PhabricatorPluginConfig {
                     logger.info("Found Phabricator Conduit Token");
                     conduitToken = params.get(Constants.PHABRICATOR_CONDUIT_TOKEN_SETTING);
                     break;
-                case Constants.BRANCH_NAME:
-                    logger.info(String.format("Found branch name: %s", params.get(Constants.BRANCH_NAME)));
-                    branchName = params.get(Constants.BRANCH_NAME);
-                    break;
                 case Constants.BUILD_ID:
                     logger.info(String.format("Found build id: %s", params.get(Constants.BUILD_ID)));
                     buildId = params.get(Constants.BUILD_ID);
@@ -97,7 +92,7 @@ public class PhabricatorPluginConfig {
     }
 
     public boolean isPluginSetup() {
-        if (!isNull(phabricatorUrl) && !isNullOrEmpty(branchName) && !isNullOrEmpty(buildId) && !isNullOrEmpty(diffId)
+        if (!isNull(phabricatorUrl) && !isNullOrEmpty(buildId) && !isNullOrEmpty(diffId)
                 && !isNullOrEmpty(harbormasterPHID) && !isNullOrEmpty(revisionId)) {
             return true;
         }

@@ -13,10 +13,6 @@ public class PhabricatorBuildStartContextProcessor implements BuildStartContextP
         // agent
         Map<String, String> parameters = context.getBuild().getBuildOwnParameters();
 
-        if (parameters.containsKey(Constants.BRANCH_NAME)) {
-            context.addSharedParameter(Constants.BRANCH_NAME, parameters.get(Constants.BRANCH_NAME));
-        }
-
         if (parameters.containsKey(Constants.BUILD_ID)) {
             context.addSharedParameter(Constants.BUILD_ID, parameters.get(Constants.BUILD_ID));
         }
