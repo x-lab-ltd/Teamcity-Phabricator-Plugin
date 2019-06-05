@@ -6,5 +6,5 @@
        default-autowire="constructor">
 
        <bean class="uk.xlab.teamcity.phabricator.AgentBuildExtension" />
-       <bean class="uk.xlab.teamcity.phabricator.PhabricatorAgentLogger" />
+       <bean class="uk.xlab.teamcity.phabricator.logging.PhabricatorAgentLogger" />
 </beans>

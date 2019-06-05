@@ -1,4 +1,4 @@
-package uk.xlab.teamcity.phabricator;
+package uk.xlab.teamcity.phabricator.logging;
 
 import jetbrains.buildServer.log.Loggers;
 

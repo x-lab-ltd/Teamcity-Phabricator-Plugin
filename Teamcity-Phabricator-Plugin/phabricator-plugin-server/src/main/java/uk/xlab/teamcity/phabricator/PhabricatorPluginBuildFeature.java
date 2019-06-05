@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import jetbrains.buildServer.serverSide.BuildFeature;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
+import uk.xlab.teamcity.phabricator.logging.PhabricatorServerLogger;
 
 public class PhabricatorPluginBuildFeature extends BuildFeature {
 

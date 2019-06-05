@@ -5,7 +5,7 @@
        default-autowire="constructor">
 
        <bean class="uk.xlab.teamcity.phabricator.PhabricatorPluginBuildFeature" />
-       <bean class="uk.xlab.teamcity.phabricator.PhabricatorServerLogger" />
        <bean class="uk.xlab.teamcity.phabricator.PhabricatorBuildServerAdapter" />
        <bean class="uk.xlab.teamcity.phabricator.PhabricatorBuildStartContextProcessor" />
+       <bean class="uk.xlab.teamcity.phabricator.logging.PhabricatorServerLogger" />
 </beans>

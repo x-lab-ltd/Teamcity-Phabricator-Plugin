@@ -12,6 +12,7 @@ import jetbrains.buildServer.agent.AgentLifeCycleListener;
 import jetbrains.buildServer.agent.AgentRunningBuild;
 import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.util.EventDispatcher;
+import uk.xlab.teamcity.phabricator.logging.PhabricatorAgentLogger;
 
 public class AgentBuildExtension extends AgentLifeCycleAdapter {
 

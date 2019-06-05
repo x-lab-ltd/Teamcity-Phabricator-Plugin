@@ -6,6 +6,7 @@ import jetbrains.buildServer.serverSide.BuildServerAdapter;
 import jetbrains.buildServer.serverSide.BuildServerListener;
 import jetbrains.buildServer.serverSide.SRunningBuild;
 import jetbrains.buildServer.util.EventDispatcher;
+import uk.xlab.teamcity.phabricator.logging.PhabricatorServerLogger;
 
 /**
  * Listen for builds been started and track their progress with BuildTracker

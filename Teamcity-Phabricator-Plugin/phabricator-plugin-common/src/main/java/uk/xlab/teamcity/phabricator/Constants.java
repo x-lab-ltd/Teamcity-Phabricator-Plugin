@@ -9,6 +9,7 @@ public class Constants {
     public static final String BUILD_FEATURE_TYPE = "phabricator-build-feature";
     public static final String PHABRICATOR_URL_SETTING = "plugin.phabricatorUrl";
     public static final String PHABRICATOR_CONDUIT_TOKEN_SETTING = "plugin.conduitToken";
+    public static final String PHABRICATOR_ARCANIST_PATH_SETTING = "plugin.pathToArc";
 
     // Build Config
     public static final String BUILD_ID = "phabricator.BUILD_ID";

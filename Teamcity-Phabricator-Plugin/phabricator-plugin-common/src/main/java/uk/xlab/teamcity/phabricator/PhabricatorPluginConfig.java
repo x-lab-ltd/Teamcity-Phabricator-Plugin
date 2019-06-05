@@ -3,6 +3,9 @@ package uk.xlab.teamcity.phabricator;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+
+import uk.xlab.teamcity.phabricator.logging.PhabricatorPluginLogger;
+
 import static uk.xlab.teamcity.phabricator.CommonUtils.*;
 
 /**
@@ -21,6 +24,7 @@ public class PhabricatorPluginConfig {
     // Build Feature Variables
     private URL phabricatorUrl;
     private String conduitToken;
+    private String pathToArcanist;
 
     // Harbormaster Variables
     private String buildId;
@@ -66,6 +70,10 @@ public class PhabricatorPluginConfig {
                     logger.info("Found Phabricator Conduit Token");
                     conduitToken = params.get(Constants.PHABRICATOR_CONDUIT_TOKEN_SETTING);
                     break;
+                case Constants.PHABRICATOR_ARCANIST_PATH_SETTING:
+                    logger.info(String.format("Found Phabricator Arcanist Path: %s", params.get(Constants.PHABRICATOR_ARCANIST_PATH_SETTING)));
+                    pathToArcanist = params.get(Constants.PHABRICATOR_ARCANIST_PATH_SETTING);
+                    break;
                 case Constants.BUILD_ID:
                     logger.info(String.format("Found build id: %s", params.get(Constants.BUILD_ID)));
                     buildId = params.get(Constants.BUILD_ID);
@@ -92,7 +100,7 @@ public class PhabricatorPluginConfig {
     }
 
     public boolean isPluginSetup() {
-        if (!isNull(phabricatorUrl) && !isNullOrEmpty(buildId) && !isNullOrEmpty(diffId)
+        if (!isNull(phabricatorUrl) && !isNull(pathToArcanist) && !isNullOrEmpty(buildId) && !isNullOrEmpty(diffId)
                 && !isNullOrEmpty(harbormasterPHID) && !isNullOrEmpty(revisionId)) {
             return true;
         }

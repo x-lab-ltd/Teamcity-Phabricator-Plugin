@@ -1,4 +1,4 @@
-package uk.xlab.teamcity.phabricator;
+package uk.xlab.teamcity.phabricator.logging;
 
 public interface PhabricatorPluginLogger {
 

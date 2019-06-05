@@ -10,6 +10,7 @@ import java.util.Map;
 import jetbrains.buildServer.messages.Status;
 import jetbrains.buildServer.serverSide.SBuildFeatureDescriptor;
 import jetbrains.buildServer.serverSide.SRunningBuild;
+import uk.xlab.teamcity.phabricator.logging.PhabricatorServerLogger;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
