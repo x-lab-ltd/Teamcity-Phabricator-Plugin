@@ -42,6 +42,7 @@ public class AgentBuildExtension extends AgentLifeCycleAdapter {
                 .getBuildFeaturesOfType(Constants.BUILD_FEATURE_TYPE);
 
         if (phabricatorBuildFeatureParameters.isEmpty()) {
+            phabricatorTriggeredBuild = false;
             return;
         }
 
