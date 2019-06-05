@@ -98,6 +98,10 @@ public class AgentBuildExtension extends AgentLifeCycleAdapter {
 
         if (patchCode > 0) {
             runningBuild.stopBuild("Patch failed to apply. Check the agent output log for patch failure detals.");
+            return;
         }
+
+        buildLogger.message(String.format(OUTPUT_PREFIX, "Patch completed"));
+        agentLogLogger.info("Patch completed");
     }
 }
