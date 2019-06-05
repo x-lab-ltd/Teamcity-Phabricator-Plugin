@@ -11,8 +11,8 @@
   <properties>
       <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
       <teamcity.phabricator-plugin.plugin.version>snapshot-${maven.build.timestamp}</teamcity.phabricator-plugin.plugin.version>
-      <teamcity.phabricator-plugin.plugin.vendorName>Plugin vendor name</teamcity.phabricator-plugin.plugin.vendorName>
-      <teamcity.phabricator-plugin.plugin.vendorUrl>Plugin vendor URL</teamcity.phabricator-plugin.plugin.vendorUrl>
+      <teamcity.phabricator-plugin.plugin.vendorName>X-Lab Ltd</teamcity.phabricator-plugin.plugin.vendorName>
+      <teamcity.phabricator-plugin.plugin.vendorUrl>https://www.x-labsystems.co.uk/</teamcity.phabricator-plugin.plugin.vendorUrl>
   </properties>
   <dependencies>
       <dependency>
@@ -37,7 +37,7 @@
             <groupId>com.google.code.maven-replacer-plugin</groupId>
             <artifactId>replacer</artifactId>
             <version>1.5.2</version>
-            <executions>                
+            <executions>
                 <execution>
                     <phase>process-sources</phase>
                     <goals>
@@ -61,7 +61,7 @@
                         <token>@VendorURL@</token>
                         <value>${teamcity.phabricator-plugin.plugin.vendorUrl}</value>
                     </replacement>
-                </replacements>                        
+                </replacements>
             </configuration>
         </plugin>
         <plugin>
