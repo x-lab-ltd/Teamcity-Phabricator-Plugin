@@ -48,6 +48,15 @@ public class PhabricatorPluginConfig {
      * @param parameters
      */
     public void setParameters(Map<String, String> parameters) {
+        // Clear the class variables to avoid any lingering references
+        phabricatorUrl = null;
+        conduitToken = null;
+        pathToArcanist = null;
+        buildId = null;
+        diffId = null;
+        harbormasterPHID = null;
+        revisionId = null;
+
         params = parameters;
 
         logger.info("Looking for parameters");
@@ -71,7 +80,8 @@ public class PhabricatorPluginConfig {
                     conduitToken = params.get(Constants.PHABRICATOR_CONDUIT_TOKEN_SETTING);
                     break;
                 case Constants.PHABRICATOR_ARCANIST_PATH_SETTING:
-                    logger.info(String.format("Found Phabricator Arcanist Path: %s", params.get(Constants.PHABRICATOR_ARCANIST_PATH_SETTING)));
+                    logger.info(String.format("Found Phabricator Arcanist Path: %s",
+                            params.get(Constants.PHABRICATOR_ARCANIST_PATH_SETTING)));
                     pathToArcanist = params.get(Constants.PHABRICATOR_ARCANIST_PATH_SETTING);
                     break;
                 case Constants.BUILD_ID:
@@ -116,8 +126,24 @@ public class PhabricatorPluginConfig {
         return conduitToken;
     }
 
+    public String getPathToArcanist() {
+        return pathToArcanist;
+    }
+
+    public String getBuildId() {
+        return buildId;
+    }
+
+    public String getDiffId() {
+        return diffId;
+    }
+
     public String getHarbormasterPHID() {
         return harbormasterPHID;
+    }
+
+    public String getRevisionId() {
+        return revisionId;
     }
 
     private URL parsePhabricatorURL(String input) throws MalformedURLException {

@@ -16,6 +16,7 @@ import uk.xlab.teamcity.phabricator.logging.PhabricatorAgentLogger;
 
 public class AgentBuildExtension extends AgentLifeCycleAdapter {
 
+    private static final String OUTPUT_PREFIX = "Phabricator Plugin - %s";
     private PhabricatorAgentLogger agentLogLogger;
     private BuildProgressLogger buildLogger;
     private PhabricatorPluginConfig phabricatorConfig;
@@ -57,12 +58,26 @@ public class AgentBuildExtension extends AgentLifeCycleAdapter {
         // everything is present and correct for us to continue
         if (!phabricatorConfig.isPluginSetup()) {
             agentLogLogger.info("Plugin incorrectly configured");
+            phabricatorTriggeredBuild = false;
             return;
         }
 
         phabricatorTriggeredBuild = true;
         agentLogLogger.info("Plugin ready");
-        buildLogger.message("Phabricator Plugin - Active");
+        buildLogger.message(String.format(OUTPUT_PREFIX, "Active"));
+
+        buildLogger.message(String.format(OUTPUT_PREFIX, String.format("%s: %s", Constants.PHABRICATOR_URL_SETTING,
+                phabricatorConfig.getPhabricatorURL().toString())));
+        buildLogger.message(String.format(OUTPUT_PREFIX, String.format("%s: %s",
+                Constants.PHABRICATOR_ARCANIST_PATH_SETTING, phabricatorConfig.getPathToArcanist())));
+        buildLogger.message(String.format(OUTPUT_PREFIX,
+                String.format("%s: %s", Constants.BUILD_ID, phabricatorConfig.getBuildId())));
+        buildLogger.message(String.format(OUTPUT_PREFIX,
+                String.format("%s: %s", Constants.DIFF_ID, phabricatorConfig.getDiffId())));
+        buildLogger.message(String.format(OUTPUT_PREFIX, String.format("%s: %s", Constants.HARBORMASTER_PHID,
+                phabricatorConfig.getPhabricatorURL().toString())));
+        buildLogger.message(String.format(OUTPUT_PREFIX,
+                String.format("%s: %s", Constants.REVISION_ID, phabricatorConfig.getRevisionId())));
     }
 
     @Override
@@ -72,7 +87,17 @@ public class AgentBuildExtension extends AgentLifeCycleAdapter {
             return;
         }
 
-        buildLogger.message("PHAB: SOURCES HAVE UPDATED");
-        agentLogLogger.info("PHAB: SOURCES HAVE UPDATED");
+        buildLogger.message(String.format(OUTPUT_PREFIX, "Attempting arc patch"));
+        agentLogLogger.info("Attempting arc patch");
+
+        ArcanistClient arcanistClient = new ArcanistClient(phabricatorConfig.getPathToArcanist(),
+                runningBuild.getCheckoutDirectory().getPath(), phabricatorConfig.getPhabricatorURL().toString(),
+                phabricatorConfig.getConduitToken(), agentLogLogger);
+
+        int patchCode = arcanistClient.patch(phabricatorConfig.getDiffId());
+
+        if (patchCode > 0) {
+            runningBuild.stopBuild("Patch failed to apply. Check the agent output log for patch failure detals.");
+        }
     }
 }
