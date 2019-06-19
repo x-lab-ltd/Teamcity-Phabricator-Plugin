@@ -8,6 +8,11 @@ import jetbrains.buildServer.serverSide.BuildFeature;
 import jetbrains.buildServer.web.openapi.PluginDescriptor;
 import uk.xlab.teamcity.phabricator.logging.PhabricatorServerLogger;
 
+/**
+ * Sets up a Build Feature for the phabricator plugin. Ultimately allowing the
+ * plugin to be configured through the TeamCity BuildFeature UI.
+ *
+ */
 public class PhabricatorPluginBuildFeature extends BuildFeature {
 
     private final String myEditUrl;

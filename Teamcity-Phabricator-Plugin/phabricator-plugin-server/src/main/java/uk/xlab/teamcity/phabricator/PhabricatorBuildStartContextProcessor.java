@@ -5,6 +5,12 @@ import java.util.Map;
 import jetbrains.buildServer.serverSide.BuildStartContext;
 import jetbrains.buildServer.serverSide.BuildStartContextProcessor;
 
+/**
+ * At the start of a build gather the parameters the agent plugin requires and
+ * set them in shared parameters. The agent can then read them from the shared
+ * parameters.
+ *
+ */
 public class PhabricatorBuildStartContextProcessor implements BuildStartContextProcessor {
 
     @Override

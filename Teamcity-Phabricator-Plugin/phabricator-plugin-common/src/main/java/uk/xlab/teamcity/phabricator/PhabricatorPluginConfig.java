@@ -48,14 +48,9 @@ public class PhabricatorPluginConfig {
      * @param parameters
      */
     public void setParameters(Map<String, String> parameters) {
-        // Clear the class variables to avoid any lingering references
-        phabricatorUrl = null;
-        conduitToken = null;
-        pathToArcanist = null;
-        buildId = null;
-        diffId = null;
-        harbormasterPHID = null;
-        revisionId = null;
+        // Clear the class variables to avoid any previous build configurations staying
+        // around
+        clearParameters();
 
         params = parameters;
 
@@ -109,6 +104,26 @@ public class PhabricatorPluginConfig {
         }
     }
 
+    /**
+     * A little method than can be used to clear all the parameters we want to set
+     */
+    private void clearParameters() {
+        phabricatorUrl = null;
+        conduitToken = null;
+        pathToArcanist = null;
+        buildId = null;
+        diffId = null;
+        harbormasterPHID = null;
+        revisionId = null;
+    }
+
+    /**
+     * Check that all the required parameters are set and we can continue to attempt
+     * patching changes from Arcanist
+     * 
+     * @return Result of whether or not the plugin has the appropriate parameter to
+     *         be used by an agent.
+     */
     public boolean isPluginSetup() {
         if (!isNull(phabricatorUrl) && !isNull(pathToArcanist) && !isNullOrEmpty(buildId) && !isNullOrEmpty(diffId)
                 && !isNullOrEmpty(harbormasterPHID) && !isNullOrEmpty(revisionId)) {
@@ -146,6 +161,13 @@ public class PhabricatorPluginConfig {
         return revisionId;
     }
 
+    /**
+     * Parse the given URL for phabricator to verify it is not just a random string
+     * 
+     * @param input phabricator URL
+     * @return Parsed URL object of the given string phabricator URL
+     * @throws MalformedURLException The given string is not a URL
+     */
     private URL parsePhabricatorURL(String input) throws MalformedURLException {
         URL inputURL = new URL(input);
         return inputURL;

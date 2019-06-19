@@ -25,8 +25,6 @@ import org.apache.http.util.EntityUtils;
  * Class that is run in a thread once a build has started. If the build does not
  * have the phabricator build feature then the tread should come to an end
  * otherwise wait for the build to finish and report back to phabricator
- * 
- * @author steven.cooney
  *
  */
 public class BuildTracker implements Runnable {
@@ -61,7 +59,6 @@ public class BuildTracker implements Runnable {
             params.putAll(phabricatorBuildFeatureParameters.iterator().next().getParameters());
 
             // Setup plugin specific configuration
-            // TODO: implement AppConfig as PluginConfig
             phabricatorConfig.setParameters(params);
 
             // Now we have set all the parameters we need to check if

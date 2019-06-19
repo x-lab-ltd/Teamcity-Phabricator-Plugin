@@ -9,9 +9,9 @@ import jetbrains.buildServer.util.EventDispatcher;
 import uk.xlab.teamcity.phabricator.logging.PhabricatorServerLogger;
 
 /**
- * Listen for builds been started and track their progress with BuildTracker
- * 
- * @author steven.cooney
+ * Listen for builds to start by extending BuildServerAdapter. When a build
+ * starts spin up a thread of BuildTracker class to follow the progress of the
+ * build.
  *
  */
 public class PhabricatorBuildServerAdapter extends BuildServerAdapter {

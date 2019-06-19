@@ -10,15 +10,20 @@ import jetbrains.buildServer.agent.AgentBuildFeature;
 import jetbrains.buildServer.agent.AgentLifeCycleAdapter;
 import jetbrains.buildServer.agent.AgentLifeCycleListener;
 import jetbrains.buildServer.agent.AgentRunningBuild;
-import jetbrains.buildServer.agent.BuildProgressLogger;
 import jetbrains.buildServer.util.EventDispatcher;
 import uk.xlab.teamcity.phabricator.logging.PhabricatorAgentLogger;
+import uk.xlab.teamcity.phabricator.logging.PhabricatorBuildProgressLogger;
 
+/**
+ * Extend the AgentLifeCycleAdapter to check for builds which have the
+ * Phabricator build feature enabled. If enabled then patch the updated code
+ * using arcanist making sure the build is against these changed sources.
+ *
+ */
 public class AgentBuildExtension extends AgentLifeCycleAdapter {
 
-    private static final String OUTPUT_PREFIX = "Phabricator Plugin - %s";
     private PhabricatorAgentLogger agentLogLogger;
-    private BuildProgressLogger buildLogger;
+    private PhabricatorBuildProgressLogger buildLogger;
     private PhabricatorPluginConfig phabricatorConfig;
     private boolean phabricatorTriggeredBuild = false;
 
@@ -31,10 +36,18 @@ public class AgentBuildExtension extends AgentLifeCycleAdapter {
         phabricatorConfig.setLogger(agentLogLogger);
     }
 
+    /**
+     * From the associated parameters determine if the phabricator build feature is
+     * enabled and we have all the information to successfully patch changes from
+     * the phabricator differential revision
+     */
     @Override
     public void buildStarted(@NotNull AgentRunningBuild runningBuild) {
+        // Reset the check for a phabricator build
+        phabricatorTriggeredBuild = false;
+
         // Setup logger to print to build output
-        buildLogger = runningBuild.getBuildLogger();
+        buildLogger = new PhabricatorBuildProgressLogger(runningBuild.getBuildLogger());
 
         // Attempt to get the parameters set by the phabricator build feature. If non
         // are set then the feature is not turned on.
@@ -42,7 +55,6 @@ public class AgentBuildExtension extends AgentLifeCycleAdapter {
                 .getBuildFeaturesOfType(Constants.BUILD_FEATURE_TYPE);
 
         if (phabricatorBuildFeatureParameters.isEmpty()) {
-            phabricatorTriggeredBuild = false;
             return;
         }
 
@@ -59,28 +71,26 @@ public class AgentBuildExtension extends AgentLifeCycleAdapter {
         // everything is present and correct for us to continue
         if (!phabricatorConfig.isPluginSetup()) {
             agentLogLogger.info("Plugin incorrectly configured");
-            phabricatorTriggeredBuild = false;
             return;
         }
 
         phabricatorTriggeredBuild = true;
         agentLogLogger.info("Plugin ready");
-        buildLogger.message(String.format(OUTPUT_PREFIX, "Active"));
+        buildLogger.message("Active");
 
-        buildLogger.message(String.format(OUTPUT_PREFIX, String.format("%s: %s", Constants.PHABRICATOR_URL_SETTING,
-                phabricatorConfig.getPhabricatorURL().toString())));
-        buildLogger.message(String.format(OUTPUT_PREFIX, String.format("%s: %s",
-                Constants.PHABRICATOR_ARCANIST_PATH_SETTING, phabricatorConfig.getPathToArcanist())));
-        buildLogger.message(String.format(OUTPUT_PREFIX,
-                String.format("%s: %s", Constants.BUILD_ID, phabricatorConfig.getBuildId())));
-        buildLogger.message(String.format(OUTPUT_PREFIX,
-                String.format("%s: %s", Constants.DIFF_ID, phabricatorConfig.getDiffId())));
-        buildLogger.message(String.format(OUTPUT_PREFIX, String.format("%s: %s", Constants.HARBORMASTER_PHID,
-                phabricatorConfig.getPhabricatorURL().toString())));
-        buildLogger.message(String.format(OUTPUT_PREFIX,
-                String.format("%s: %s", Constants.REVISION_ID, phabricatorConfig.getRevisionId())));
+        buildLogger.logParameter(Constants.PHABRICATOR_URL_SETTING, phabricatorConfig.getPhabricatorURL().toString());
+        buildLogger.logParameter(Constants.PHABRICATOR_ARCANIST_PATH_SETTING, phabricatorConfig.getPathToArcanist());
+        buildLogger.logParameter(Constants.BUILD_ID, phabricatorConfig.getBuildId());
+        buildLogger.logParameter(Constants.DIFF_ID, phabricatorConfig.getDiffId());
+        buildLogger.logParameter(Constants.HARBORMASTER_PHID, phabricatorConfig.getHarbormasterPHID());
+        buildLogger.logParameter(Constants.REVISION_ID, phabricatorConfig.getRevisionId());
     }
 
+    /**
+     * Once the sources have been updated via the native TeamCity process check if
+     * the Phabricator build feature is enabled and use arcanist to patch in changes
+     * from a associated phabricator differential revision.
+     */
     @Override
     public void sourcesUpdated(@NotNull AgentRunningBuild runningBuild) {
 
@@ -88,7 +98,7 @@ public class AgentBuildExtension extends AgentLifeCycleAdapter {
             return;
         }
 
-        buildLogger.message(String.format(OUTPUT_PREFIX, "Attempting arc patch"));
+        buildLogger.message(String.format(Constants.LOGGING_PREFIX_TEMPLATE, "Attempting arc patch"));
         agentLogLogger.info("Attempting arc patch");
 
         ArcanistClient arcanistClient = new ArcanistClient(phabricatorConfig.getPathToArcanist(),
@@ -96,13 +106,15 @@ public class AgentBuildExtension extends AgentLifeCycleAdapter {
                 phabricatorConfig.getConduitToken(), agentLogLogger);
 
         int patchCode = arcanistClient.patch(phabricatorConfig.getDiffId());
+        agentLogLogger.info(String.format("Arc patch exited with code: %s", patchCode));
 
         if (patchCode > 0) {
             runningBuild.stopBuild("Patch failed to apply. Check the agent output log for patch failure detals.");
+            agentLogLogger.info("Patch failed to apply, stopping build");
             return;
         }
 
-        buildLogger.message(String.format(OUTPUT_PREFIX, "Patch completed"));
+        buildLogger.message(String.format(Constants.LOGGING_PREFIX_TEMPLATE, "Patch completed"));
         agentLogLogger.info("Patch completed");
     }
 }
