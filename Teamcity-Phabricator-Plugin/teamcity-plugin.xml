@@ -5,12 +5,9 @@
     <display-name>Phabricator Reporter</display-name>
     <version>@Version@</version>
     <description>Reports the status of Harbormaster trigged builds</description>
-    <download-url>Plugin download URL</download-url>
-    <email>Plugin author e-mail</email>
     <vendor>
       <name>@VendorName@</name>
       <url>@VendorURL@</url>
-      <logo>Plugin vendor logo URL</logo>
     </vendor>
   </info>
   <deployment use-separate-classloader="true"/>

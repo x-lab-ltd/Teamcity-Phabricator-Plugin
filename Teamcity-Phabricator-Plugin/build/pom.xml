@@ -89,7 +89,7 @@
                   <goal>single</goal>
                 </goals>
                 <configuration>
-                  <finalName>phabricator-plugin</finalName>
+                  <finalName>Teamcity-Phabricator-Plugin-${teamcity.phabricator-plugin.plugin.version}</finalName>
                   <outputDirectory>${project.parent.build.directory}</outputDirectory>
                   <appendAssemblyId>false</appendAssemblyId>
                   <descriptors>
